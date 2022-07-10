@@ -2,11 +2,15 @@ import "./Nav.css";
 
 import { Link } from "react-router-dom";
 
+import Lucy from "../../assets/images/Lucy.png";
+
 const Nav: React.FC = () => {
   return (
     <div className="nav--container">
       <Link to="/" style={{ textDecoration: "none", color: "white" }}>
-        <div className="home">HOME </div>
+        <div className="home">
+          <img src={Lucy} style={{ height: "60px" }} alt="HOME"></img>
+        </div>
       </Link>
 
       <li className="navigation">

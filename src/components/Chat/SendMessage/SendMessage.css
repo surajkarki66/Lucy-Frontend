@@ -1,0 +1,48 @@
+.sendMsg {
+  position: fixed;
+  display: flex;
+  width: 100%;
+  bottom: 0;
+  z-index: 1;
+  border-top: 1px solid lightgray;
+  margin-left: -5px;
+  padding: 10px;
+  padding-bottom: 30px;
+  background-color: #fafafa;
+}
+.input-message {
+  width: 100%;
+  font-size: 16px;
+  font-weight: 550px;
+  margin-left: 5px;
+  margin-top: 20px;
+}
+.btn-send {
+  border: none;
+  width: 18%;
+  font-size: 18px;
+  font-weight: 550px;
+  margin: 14px 5% -5px 5%;
+  max-width: 200px;
+  color: #fff;
+  background: #2a80b9;
+  border-radius: 5px;
+}
+
+.btn-send:hover {
+  color: white;
+  opacity: 0.8;
+  transform: scale(1.02);
+}
+
+@media (max-width: 775px) {
+  .btn-send {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 500px) {
+  .btn-send {
+    font-size: 14px;
+  }
+}

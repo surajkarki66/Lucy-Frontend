@@ -1,36 +1,32 @@
 import "./ChatMessage.css";
-import Logo from "../../../assets/images/logo.png";
-// import { useRef } from "react";
+import LucyBlack from "../../../assets/images/LucyBlack.png";
+import User from "../../../assets/images/User.png";
 
-type PropsType = { message: string };
+type PropsType = {
+  message: string;
+  links: string[];
+  id: string;
+};
 
-const ChatMessage: React.FC<PropsType> = ({ message }) => {
-  // const scroll = useRef();
+const ChatMessage: React.FC<PropsType> = ({ message, id, links }) => {
   return (
     <div>
-      <div className="msgs">
-        <div>
-          <div className="msg received">
-            <img src={Logo} alt="" />
-            <p>{message}</p>
-          </div>
-        </div>
+      <div className={`msg ${id === "lucy" ? "received" : "sent"}`}>
+        <img
+          src={id === "lucy" ? LucyBlack : User}
+          alt={id === "lucy" ? "Lucy" : "User"}
+        />
+        <p>
+          {message}{" "}
+          {links
+            ? links.map((link, id) => (
+                <a key={id} href={link} target="__blank">
+                  {link}
+                </a>
+              ))
+            : null}
+        </p>
       </div>
-      <div>
-        <form>
-          <div className="sendMsg">
-            <input
-              className="input-message"
-              placeholder="Ask anything to Lucy !"
-              type="text"
-            />
-            <button className="btn-send" type="submit">
-              Send
-            </button>
-          </div>
-        </form>
-      </div>
-      {/* <div ref={scroll}></div> */}
     </div>
   );
 };

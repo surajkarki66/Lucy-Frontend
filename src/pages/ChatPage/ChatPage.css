@@ -1,0 +1,4 @@
+.msgs {
+  display: flex;
+  flex-direction: column;
+}
