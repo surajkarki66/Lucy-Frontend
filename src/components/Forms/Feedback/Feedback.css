@@ -5,14 +5,15 @@
   justify-content: center;
 }
 
-.form > h1 {
+.form>h1 {
   text-transform: uppercase;
   font-size: 30px;
   color: black;
   margin-bottom: 38px;
   text-align: center;
 }
-.form > h1::after {
+
+.form>h1::after {
   content: "";
   height: 5px;
   width: 102px;
@@ -22,7 +23,7 @@
   margin: auto;
 }
 
-.form > input,
+.form>input,
 textarea {
   padding: 10px;
   border-radius: 3px;
@@ -35,24 +36,24 @@ textarea {
   outline: none;
 }
 
-.form > input:focus,
+.form>input:focus,
 textarea:focus {
   border: 1px solid #2a80b9;
 }
 
-.form > textarea {
+.form>textarea {
   height: 120px;
   max-width: 400px;
   min-height: 100px;
 }
 
-.form > label {
+.form>label {
   padding-bottom: 10px;
   color: rgb(0, 0, 32);
   font-weight: bold;
 }
 
-.form > button {
+.form>button {
   padding: 10px;
   border: none;
   background: #2a80b9;
@@ -64,7 +65,7 @@ textarea:focus {
   margin-top: 10px;
 }
 
-.form > button:hover {
+.form>button:hover {
   color: white;
   opacity: 0.8;
   transform: scale(1.02);
@@ -78,4 +79,4 @@ textarea:focus {
   .form {
     width: 75%;
   }
-} 
+}
