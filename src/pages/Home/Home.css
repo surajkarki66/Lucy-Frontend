@@ -4,8 +4,10 @@ section {
   text-align: center;
 }
 .wrapper {
-  height: 70vh;
+  height: 88vh;
+
   display: flex;
+  justify-content: center;
   align-items: center;
   color: #fff;
 }
@@ -33,6 +35,10 @@ section {
 }
 .landing-text {
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;  
 }
 h1 {
   font-weight: 600;
@@ -62,3 +68,14 @@ p {
   opacity: 0.8;
   transform: scale(1.02);
 }
+/* @media (max-width: 1000px) {
+  .wrapper{
+    height: 88vh;
+  }
+}
+
+@media (max-width: 500px) {
+  .wrapper{
+    color: aqua;
+  }
+} */
