@@ -18,7 +18,7 @@ const SendMessage: React.FC<PropsType> = ({ askLucy, loading }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className='submitButton'>
         <div className="sendMsg">
           <input
             value={msg}
