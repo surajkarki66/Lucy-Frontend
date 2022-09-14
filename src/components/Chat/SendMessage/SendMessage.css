@@ -3,6 +3,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .sendMsg {
   position: fixed;
   display: flex;
@@ -15,6 +16,7 @@
   padding-bottom: 30px;
   background-color: #fafafa;
 }
+
 .input-message {
   border: none;
   width: 100%;
@@ -24,6 +26,7 @@
   margin-top: 20px;
   outline: none;
 }
+
 .btn-send {
   border: none;
   width: 18%;
