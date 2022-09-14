@@ -35,14 +35,14 @@ const Chat: React.FC = () => {
     }
   };
   return (
-    <div style={{ paddingBottom: "80px" }}>
+    <div className='chat-page' style={{ paddingBottom: "80px" }}>
       <div className="msgs">
         {messages.map((m, id) => (
           <ChatMessage key={id} id={m.id} message={m.message} links={m.links} />
         ))}
       </div>
-      <SendMessage askLucy={askLucy} loading={loading} />
-      <div ref={scroll}></div>
+        <SendMessage askLucy={askLucy} loading={loading} />
+        <div ref={scroll}></div>
     </div>
   );
 };

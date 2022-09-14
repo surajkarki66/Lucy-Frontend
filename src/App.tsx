@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import Nav from "./components/Navs/Nav";
@@ -9,6 +9,7 @@ import FeedbackPage from "./pages/Feedback/FeedbackPage";
 import AboutUs from "./pages/AboutUs/AboutUs";
 
 const App: React.FC = () => {
+  const location = useLocation();
   const routes = (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -20,7 +21,7 @@ const App: React.FC = () => {
   return (
     <>
       <ToastContainer position="top-center" />
-      <Nav />
+      {location?.pathname !== '/' && <Nav />}
       {routes}
     </>
   );

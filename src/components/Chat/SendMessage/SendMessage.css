@@ -1,7 +1,12 @@
+.submitButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .sendMsg {
   position: fixed;
   display: flex;
-  width: 100%;
+  width: 50%;
   bottom: 0;
   z-index: 1;
   border-top: 1px solid lightgray;
@@ -11,11 +16,13 @@
   background-color: #fafafa;
 }
 .input-message {
+  border: none;
   width: 100%;
   font-size: 16px;
   font-weight: 550px;
   margin-left: 5px;
   margin-top: 20px;
+  outline: none;
 }
 .btn-send {
   border: none;
