@@ -16,9 +16,9 @@ const Home: React.FC = () => {
           If you want to know anything about Nepal Engineering College, Please
           chat with Lucy
         </h3>
-        <Link to="/chat" style={{ textDecoration: "none" }}>
-          <div className="btn">Start Here</div>
-        </Link>
+        
+          <div className="btn"><Link to="/chat" style={{ textDecoration: "none" ,color:"white"}}>Start Here </Link></div>
+       
       </div>
     </section>
   );
