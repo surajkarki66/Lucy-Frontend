@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useSpeechSynthesis } from 'react-speech-kit';
+import { useSpeechSynthesis } from "react-speech-kit";
 
 import "./ChatPage.css";
 import Axios from "../../axios-url";
@@ -12,7 +12,7 @@ const Chat: React.FC = () => {
   const [messages, setMessages] = useState([
     { message: "Hello! This is Lucy, NEC chatbot", id: "lucy", links: [] },
   ]);
-  const { speak } = useSpeechSynthesis();
+  const { speak, supported } = useSpeechSynthesis();
 
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
@@ -26,7 +26,9 @@ const Chat: React.FC = () => {
     try {
       setLoading(true);
       const { data } = await Axios.get(`/bot/chat?message=${msg}`);
-      speak({ text:data.message+ data.links  })
+      if (supported) {
+        speak({ text: data.message });
+      }
       setMessages((message) => [
         ...message,
         { message: data.message, id: "lucy", links: data.links },
@@ -38,14 +40,14 @@ const Chat: React.FC = () => {
     }
   };
   return (
-    <div className='chat-page' style={{ paddingBottom: "80px" }}>
+    <div className="chat-page" style={{ paddingBottom: "80px" }}>
       <div className="msgs">
         {messages.map((m, id) => (
           <ChatMessage key={id} id={m.id} message={m.message} links={m.links} />
         ))}
       </div>
-        <SendMessage askLucy={askLucy} loading={loading} />
-        <div ref={scroll}></div>
+      <SendMessage askLucy={askLucy} loading={loading} />
+      <div ref={scroll}></div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { SyntheticEvent, useState } from "react";
 
 import "./SendMessage.css";
+import SpeechRecognition from "../../SpeechRecognition/SpeechRecognition";
 
 type PropsType = {
   askLucy: (message: string) => Promise<void>;
@@ -31,6 +32,7 @@ const SendMessage: React.FC<PropsType> = ({ askLucy, loading }) => {
           <button className="btn-send" type="submit">
             {!loading ? "Send" : "Loading"}
           </button>
+          <SpeechRecognition setMsg={setMsg} askLucy={askLucy} loading/>
         </div>
       </form>
     </div>
