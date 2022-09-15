@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useSpeechSynthesis } from 'react-speech-kit';
 
 import "./ChatPage.css";
 import Axios from "../../axios-url";
@@ -11,6 +12,7 @@ const Chat: React.FC = () => {
   const [messages, setMessages] = useState([
     { message: "Hello! This is Lucy, NEC chatbot", id: "lucy", links: [] },
   ]);
+  const { speak } = useSpeechSynthesis();
 
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
@@ -24,6 +26,7 @@ const Chat: React.FC = () => {
     try {
       setLoading(true);
       const { data } = await Axios.get(`/bot/chat?message=${msg}`);
+      speak({ text:data.message+ data.links  })
       setMessages((message) => [
         ...message,
         { message: data.message, id: "lucy", links: data.links },
