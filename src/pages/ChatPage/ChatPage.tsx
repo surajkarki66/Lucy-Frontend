@@ -10,7 +10,7 @@ const Chat: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const scroll = useRef<null | HTMLDivElement>(null);
   const [messages, setMessages] = useState([
-    { message: "Hello! This is Lucy, NEC chatbot", id: "lucy", links: [] },
+    { message: "Hello! This is Lucy, NEC chatbot", id: "lucy", link: "" },
   ]);
   const { speak, supported } = useSpeechSynthesis();
 
@@ -21,7 +21,7 @@ const Chat: React.FC = () => {
   const askLucy = async (msg: string) => {
     setMessages((message) => [
       ...message,
-      { message: msg, id: "user", links: [] },
+      { message: msg, id: "user", link: "" },
     ]);
     try {
       setLoading(true);
@@ -31,7 +31,7 @@ const Chat: React.FC = () => {
       }
       setMessages((message) => [
         ...message,
-        { message: data.message, id: "lucy", links: data.links },
+        { message: data.message, id: "lucy", link: data.link },
       ]);
       setLoading(false);
     } catch (error) {
@@ -43,7 +43,7 @@ const Chat: React.FC = () => {
     <div className="chat-page" style={{ paddingBottom: "80px" }}>
       <div className="msgs">
         {messages.map((m, id) => (
-          <ChatMessage key={id} id={m.id} message={m.message} links={m.links} />
+          <ChatMessage key={id} id={m.id} message={m.message} link={m.link} />
         ))}
       </div>
       <SendMessage askLucy={askLucy} loading={loading} />

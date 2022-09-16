@@ -4,11 +4,11 @@ import User from "../../../assets/images/User.png";
 
 type PropsType = {
   message: string;
-  links: string[];
+  link: string;
   id: string;
 };
 
-const ChatMessage: React.FC<PropsType> = ({ message, id, links }) => {
+const ChatMessage: React.FC<PropsType> = ({ message, id, link }) => {
   return (
     <div>
       <div className={`msg ${id === "lucy" ? "received" : "sent"}`}>
@@ -18,13 +18,11 @@ const ChatMessage: React.FC<PropsType> = ({ message, id, links }) => {
         />
         <p>
           {message}{" "}
-          {links
-            ? links.map((link, id) => (
-                <a key={id} href={link} target="__blank">
-                  {link}
-                </a>
-              ))
-            : null}
+          {link && (
+            <a key={id} href={link} target="__blank">
+              {link}
+            </a>
+          )}
         </p>
       </div>
     </div>
