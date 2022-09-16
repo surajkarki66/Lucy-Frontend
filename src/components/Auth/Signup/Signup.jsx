@@ -24,7 +24,7 @@ const Signup = (props) => {
 
     // RoleSelector
     const roleSelector = (event) => {
-        console.log(role)
+        setRole(event.target.value)
     }
     const submitHandler = async() => {
         const data = {
