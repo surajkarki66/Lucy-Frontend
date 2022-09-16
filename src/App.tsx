@@ -7,6 +7,8 @@ import Home from "./pages/Home/Home";
 import ChatPage from "./pages/ChatPage/ChatPage";
 import FeedbackPage from "./pages/Feedback/FeedbackPage";
 import AboutUs from "./pages/AboutUs/AboutUs";
+import Login from "./components/Auth/Login/Login";
+import Signup from "./components/Auth/Signup/Signup";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -16,6 +18,8 @@ const App: React.FC = () => {
       <Route path="/chat" element={<ChatPage />} />
       <Route path="/feedback" element={<FeedbackPage />} />
       <Route path="/aboutUs" element={<AboutUs />} />
+      <Route path='/login' element={<Login /> } />
+      <Route path='/signup' element={<Signup />} />
     </Routes>
   );
   return (
