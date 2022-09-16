@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link , Navigate} from 'react-router-dom';
+import { Navigate} from 'react-router-dom';
 
 import './Login.css';
 
@@ -38,15 +38,13 @@ const Login = (props) => {
         // HTML file to show to the user 
         return (
             <div className="Container">
-                <div class="container" id="container">
-                    <div class="form-container sign-in-container">
-                        <div className="form">
-                            <h1>Login</h1>
-                            <input type="email" placeholder="Email" onChange={emailHandler}/>
-                            <input type="password" placeholder="Password"  onChange={passwordHandler} />
-                            <a href="#">Forgot your password?</a>
-                            <button onClick={submitHandler}>Login</button>
-                        </div>
+                <div class="form-container sign-in-container">
+                    <div className="form">
+                        <h1>Login</h1>
+                        <input type="email" placeholder="Email" onChange={emailHandler}/>
+                        <input type="password" placeholder="Password"  onChange={passwordHandler} />
+                        <a href="#">Forgot your password?</a>
+                        <button onClick={submitHandler}>Login</button>
                     </div>
                 </div>
             </div>

@@ -52,25 +52,23 @@ const Signup = (props) => {
         // HTML file to show to the user 
     return (
         <div className="Container">
-        <div class="container" id="container">
             <div class="form-container sign-in-container">
                 <div className="form">
                     <h1>Sign Up</h1>
                     <input type="text" placeholder="Name" onChange={nameHandler}/>
                     <input type="email" placeholder="Email" onChange={emailHandler}/>
                     <input type="password" placeholder="Password"  onChange={passwordHandler} />
-                       <div>
-                     <h4 className="label" >Role</h4>
-                      <select value={role} onChange={roleSelector}>
+                        <div>
+                        <h4 className="label" >Role</h4>
+                        <select value={role} onChange={roleSelector}>
                                 <option value="" >...</option>
-                             <option value="publisher" >Admin</option>
-                              <option value="user">User</option>
-                           </select>
+                                <option value="publisher" >Admin</option>
+                                <option value="user">User</option>
+                            </select>
                     </div>
                     <a></a>
                     <button onClick={submitHandler}>Sign Up</button>
                 </div>
-            </div>
         </div>
     </div>
         // <div className="Singup">
