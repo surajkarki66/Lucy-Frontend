@@ -27,6 +27,7 @@ const Login = (props) => {
         axios.post(LOGINAPI, data, {withCredentials: true})
             .then(response => {
                 console.log(response.data);
+                //Set in localstorage or cookies
                 window.location.reload(false);
             })
             .catch(error => console.log(error.message));
