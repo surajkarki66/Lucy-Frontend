@@ -9,6 +9,7 @@ import FeedbackPage from "./pages/Feedback/FeedbackPage";
 import AboutUs from "./pages/AboutUs/AboutUs";
 import Login from "./components/Auth/Login/Login";
 import Signup from "./components/Auth/Signup/Signup";
+import AdminPageHome from "./components/Admin/Home/Home";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -20,6 +21,7 @@ const App: React.FC = () => {
       <Route path="/aboutUs" element={<AboutUs />} />
       <Route path='/login' element={<Login /> } />
       <Route path='/signup' element={<Signup />} />
+      <Route path="/admin" element={<AdminPageHome />} />
     </Routes>
   );
   return (
