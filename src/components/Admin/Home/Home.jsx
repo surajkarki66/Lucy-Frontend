@@ -16,7 +16,7 @@ const AdminPageHome = () => {
   };
   const [content, setContent] = useState('Feedbacks')
 
-console.log(content)
+  // Check if user in cookies or localstorage if not then navigate login page
   return (
     <div className="adminhome">
             <SideBar logoutButtonHandler={logoutButtonHandler} setContent={setContent}/>
