@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Navigate} from 'react-router-dom';
 
 import '../Auth.css';
+import { LOGINAPI } from '../../Constants/ApiConstants';
 
 const Login = (props) => {
     const [email , setEmail] = useState("");
@@ -23,7 +24,7 @@ const Login = (props) => {
             password
         }
         console.log(data)
-        axios.post('http://localhost:5000/api/v1/auth/login', data, {withCredentials: true})
+        axios.post(LOGINAPI, data, {withCredentials: true})
             .then(response => {
                 console.log(response.data);
                 window.location.reload(false);

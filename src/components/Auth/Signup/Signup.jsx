@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Navigate } from 'react-router';
+import { SIGNUPAPI } from '../../Constants/ApiConstants';
  
 
 const Signup = (props) => {
     const [email , setEmail] = useState("");
-    const [name, setName] = useState("");
-    const [role, setRole] = useState("");
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [password, setPassword] = useState("");
 
     // Handler 
@@ -18,22 +19,22 @@ const Signup = (props) => {
         setPassword(event.target.value);
     }
 
-    const nameHandler = (event) => {
-        setName(event.target.value);
+    const firstNameHandler = (event) => {
+        setFirstName(event.target.value);
     }
 
-    // RoleSelector
-    const roleSelector = (event) => {
-        console.log(role)
+    const lastNameHandler = (event) => {
+        setLastName(event.target.value);
     }
+
     const submitHandler = async() => {
         const data = {
             email, 
-            name, 
-            role, 
+            firstName,
+            lastName, 
             password
         }
-        axios.post('http://localhost:5000/api/v1/auth/register', data, {withCredentials: true})
+        axios.post(SIGNUPAPI, data, {withCredentials: true})
             .then(response => {
                 
                 console.log(response.data.token);
@@ -54,18 +55,10 @@ const Signup = (props) => {
             <div class="form-container sign-in-container">
                 <div className="form">
                     <h1>Sign Up</h1>
-                    <input type="text" placeholder="Name" onChange={nameHandler}/>
+                    <input type="text" placeholder="First Name" onChange={firstNameHandler}/>
+                    <input type="text" placeholder="Last Name" onChange={lastNameHandler}/>
                     <input type="email" placeholder="Email" onChange={emailHandler}/>
                     <input type="password" placeholder="Password"  onChange={passwordHandler} />
-                        <div>
-                        <h4 className="label" >Role</h4>
-                        <select value={role} onChange={roleSelector}>
-                                <option value="" >...</option>
-                                <option value="publisher" >Admin</option>
-                                <option value="user">User</option>
-                            </select>
-                    </div>
-                    <a></a>
                     <button onClick={submitHandler}>Sign Up</button>
                 </div>
         </div>
