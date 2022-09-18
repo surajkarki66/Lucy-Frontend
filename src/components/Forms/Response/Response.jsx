@@ -1,29 +1,39 @@
 import {useFormContext} from 'react-hook-form'
 import CloseIcon from '@mui/icons-material/Close';
-import { Axios } from 'axios';
-import { CREATERESPONSE } from '../../Constants/ApiConstants';
+import axios, { Axios } from 'axios';
+import { CREATERESPONSE, RESPONSE } from '../../Constants/ApiConstants';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import { axiosMethod, sendPost } from '../../Api/Post';
 
-const ResponsePopup = ({setShowForm, data}) => {
+
+
+
+const ResponsePopup = ({setShowForm, data, refetch}) => {
     const {register, handleSubmit, reset} = useFormContext()
+    const token = localStorage.getItem('tokan')
+    
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     useEffect(() => {
         if(data) {
             reset({
-                Tag: data?.Tag,
-                Link: data?.Link,
+                tag: data?.tag,
+                link: data?.link,
                 text: data?.text
             })
         }
 
     }, [, data])
 
-    const formSubmit = async(data) => {
-        console.log(data)
+    const formSubmit = async(d) => {
+        let sucess;
         if(data) {
-            //update api
+            sucess = await axiosMethod({url: `${RESPONSE}/${data?.id}`, data: d, method: 'patch'})
+            
         }else{
-            //create api
+            sucess = await axiosMethod({url: CREATERESPONSE, data: d, method: 'post'})
         }
+        if(sucess) refetch()
     }
     return (
         <div className="popup">
@@ -48,7 +58,6 @@ const ResponsePopup = ({setShowForm, data}) => {
                 {...register('link')}
                 minLength={2}
                 maxLength={255}
-                required
             />
           <label>Text</label>
           <textarea

@@ -1,27 +1,33 @@
 import {useFormContext} from 'react-hook-form'
 import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
+import { axiosMethod } from '../../Api/Post';
+import { CREATEQUERY, QUERY } from '../../Constants/ApiConstants';
+import axios from 'axios';
 
-const QueryPopup = ({setShowForm, data}) => {
+
+const QueryPopup = ({setShowForm, data, refetch}) => {
     const {register, handleSubmit, reset} = useFormContext()
 
-        
+    const token = localStorage.getItem('tokan')
+    
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     useEffect(() => {
         if(data) {
             reset({
                 text: data?.text,
-                indent: data?.indent,
+                intent: data?.intent,
             })
         }
 
     }, [, data])
 
-    const formSubmit = (data) => {
-        console.log(data)
+    const formSubmit = async(d) => {
         if(data) {
-            //update api
+            axiosMethod({url: `${QUERY}/${data?.id}`, data: d, method: 'patch'})
         }else{
-            //create api
+            axiosMethod({url: CREATEQUERY, data: d, method: 'post'})
         }
     }
     console.log('dsf')
@@ -39,10 +45,10 @@ const QueryPopup = ({setShowForm, data}) => {
             required
           />
   
-          <label>Indent</label>
+          <label>intent</label>
           <textarea
-            placeholder="Indent"
-            {...register('indent')}
+            placeholder="intent"
+            {...register('intent')}
             minLength={2}
             maxLength={255}
             required

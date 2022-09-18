@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Navigate } from 'react-router';
 import { SIGNUPAPI } from '../../Constants/ApiConstants';
+import jwt from 'jwt-decode'
+import { toast } from 'react-toastify';
+import Spinner from '../../Loaders/Spinner';
+import { axiosMethod } from '../../Api/Post';
  
 
 const Signup = (props) => {
     const [email , setEmail] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const [first_name, setfirst_name] = useState("");
+    const [last_name, setlast_name] = useState("");
     const [password, setPassword] = useState("");
 
     // Handler 
@@ -19,35 +23,44 @@ const Signup = (props) => {
         setPassword(event.target.value);
     }
 
-    const firstNameHandler = (event) => {
-        setFirstName(event.target.value);
+    const first_nameHandler = (event) => {
+        setfirst_name(event.target.value);
     }
 
-    const lastNameHandler = (event) => {
-        setLastName(event.target.value);
+    const last_nameHandler = (event) => {
+        setlast_name(event.target.value);
     }
 
     const submitHandler = async() => {
         const data = {
             email, 
-            firstName,
-            lastName, 
+            first_name,
+            last_name, 
             password
         }
-        axios.post(SIGNUPAPI, data, {withCredentials: true})
-            .then(response => {
-                
-                console.log(response.data.token);
-                window.location.reload(false);
-                
-            })
-            .catch(error => console.log(error.message));
+        axiosMethod({url: SIGNUPAPI, data: data, method: 'post'})
     }
+    
+    const [isAdmin, setIsAdmin ] = useState(false)
+    const [isLoading, setIsLoading] = useState(true);
 
-    if(props.isLogin){
+    
+    useEffect(() => {
+        const token = localStorage.getItem('tokan')
+        let user;
+        if(token) user = jwt(token)
+        if(user?.role === 'admin') setIsAdmin(true)
+        setIsLoading(false)
+    }, [])
+
+    if(!isAdmin && !isLoading){
+        toast.warning('Unauthorized!',)
         return (
             <Navigate to='/' />
         )
+    }
+    else if (isLoading){
+        return <Spinner />
     }else {
         // HTML file to show to the user 
     return (
@@ -55,40 +68,14 @@ const Signup = (props) => {
             <div class="form-container sign-in-container">
                 <div className="form">
                     <h1>Sign Up</h1>
-                    <input type="text" placeholder="First Name" onChange={firstNameHandler}/>
-                    <input type="text" placeholder="Last Name" onChange={lastNameHandler}/>
+                    <input type="text" placeholder="First Name" onChange={first_nameHandler}/>
+                    <input type="text" placeholder="Last Name" onChange={last_nameHandler}/>
                     <input type="email" placeholder="Email" onChange={emailHandler}/>
                     <input type="password" placeholder="Password"  onChange={passwordHandler} />
                     <button onClick={submitHandler}>Sign Up</button>
                 </div>
         </div>
     </div>
-        // <div className="Singup">
-        //     <h3 className="title">Signup for users</h3>
-        //         <div>
-        //             <h4 className="label">Name</h4>
-        //             <input type="text" name="InputName" placeholder='Name' onChange={nameHandler}></input>
-        //         </div>
-        //         <div>
-        //             <h4 className="label" >Role</h4>
-        //                 <select value={role} onChange={roleSelector}>
-        //                     <option value="" >...</option>
-        //                     <option value="publisher" >Publisher</option>
-        //                     <option value="user">User</option>
-        //                 </select>
-        //         </div>
-        //         <div>
-        //             <h4 className="label">Email</h4>
-        //             <input type="email" name="InputEmail" placeholder='Email' onChange={emailHandler}></input>
-        //         </div>
-        //         <div>
-        //             <h4 className="label">Password</h4>
-        //             <input type='password' name="InputPassword" placeholder='Password' onChange={passwordHandler}></input>
-        //         </div>
-        //         <div>
-        //             <button type="submit" onClick={submitHandler} >Login</button>
-        //         </div>
-        // </div>
     )
     }
 

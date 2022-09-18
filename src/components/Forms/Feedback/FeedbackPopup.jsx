@@ -3,12 +3,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
 
 const FeedbackPopUp = ({setShowForm, data}) => {
-    const {register, handleSubmit, reset} = useFormContext()
+    const {register, reset} = useFormContext()
     console.log(data)
     useEffect(() => {
         if(data) {
             reset({
-                name: data?.name,
+                name: data?.person_name,
                 email: data?.email,
                 message: data?.message
             })
@@ -16,22 +16,15 @@ const FeedbackPopUp = ({setShowForm, data}) => {
 
     }, [, data])
 
-    const formSubmit = (data) => {
-        console.log(data)
-        if(data) {
-            //update api
-        }else{
-            //create api
-        }
-    }
     return (
         <div className="popup">
-        <form className="form" onSubmit={((handleSubmit(formSubmit)))}> 
+        <form className="form"> 
           <div className="close" onClick={() => setShowForm(false)} ><CloseIcon /></div>
           <h1>Feedback</h1>
           <label>Person Name</label>
           <input
             type="text"
+            disabled
             placeholder="Write your full name"
             {...register('name')}
             minLength={2}
@@ -42,6 +35,7 @@ const FeedbackPopUp = ({setShowForm, data}) => {
           <label>Email</label>
           <input
             type="email"
+            disabled
             placeholder="Write your email"
             {...register('email')}
             required
@@ -49,12 +43,12 @@ const FeedbackPopUp = ({setShowForm, data}) => {
   
           <label>Message</label>
           <textarea
+          disabled
             placeholder="Write your feedback message"
             {...register('message')}
             required
           ></textarea>
   
-          <button type="submit">{data ? 'Update' : 'Submit'}</button>
       </form>
       </div>
     )

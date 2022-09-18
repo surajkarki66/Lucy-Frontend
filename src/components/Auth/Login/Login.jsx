@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Navigate} from 'react-router-dom';
+import { Navigate, useNavigate} from 'react-router-dom';
+import jwt from 'jwt-decode'
 
 import '../Auth.css';
 import { LOGINAPI } from '../../Constants/ApiConstants';
+import { toast } from 'react-toastify';
+import { ADMINDASHBOARD } from '../../Constants/RoutesConstants';
+import Spinner from '../../Loaders/Spinner';
 
 const Login = (props) => {
     const [email , setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate()
 
     // Handler 
     const emailHandler = (event) => {
@@ -23,20 +29,41 @@ const Login = (props) => {
             email, 
             password
         }
-        console.log(data)
         axios.post(LOGINAPI, data, {withCredentials: true})
             .then(response => {
-                console.log(response.data);
+                localStorage.setItem('tokan', response?.data?.access_token)
+                const user = jwt(response?.data?.access_token)
+                if(user?.role === 'admin'){
+                    navigate('/admin')
+                } else {
+                    toast.error('Authorization Admin Failed!')
+                }
                 //Set in localstorage or cookies
-                window.location.reload(false);
+                
             })
             .catch(error => console.log(error.message));
     }
-    if(props.isLogin){
+    const [isLogedIn, setisLogedIn ] = useState(false)
+    const [isLoading, setIsLoading] = useState(true);
+
+    
+    useEffect(() => {
+        const token = localStorage.getItem('tokan')
+        let user;
+        if(token) user = jwt(token)
+        if(user?.role === 'admin') setisLogedIn(true)
+        setIsLoading(false)
+    }, [])
+
+    if(isLogedIn){
         return (
-            <Navigate to="/" />
+            <Navigate to={ADMINDASHBOARD} />
         )
-    }else {
+    }
+    else if (isLoading){
+        return <Spinner />
+    }
+    else {
         // HTML file to show to the user 
         return (
             <div className="Container">
