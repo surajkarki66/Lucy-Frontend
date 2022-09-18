@@ -12,26 +12,26 @@ import { useQuery } from "react-query";
 import { useForm, FormProvider } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { API, DOCUMENTAPI, VERSION } from "../../Constants/ApiConstants";
+import { API, VERSION } from "../../Constants/ApiConstants";
 import FeedbackPopup from "../../Forms/Feedback/FeedbackPopup";
 import QueryPopup from "../../Forms/Query/QueryPopUp";
 import ResponsePopup from "../../Forms/Response/Response";
 import Spinner from "../../Loaders/Spinner";
-
-const dummyData = [
-  {name: 'Saman', email: 'sammyview80@gmail.com', message: 'WOrking fine great.', text: 'hello', indent: 'ok' }, 
-  {name: 'aman', email: 'aman@gmail.com', message: 'no fine great.' },{name: 'Saman', email: 'sammyview80@gmail.com', message: 'WOrking fine great.' }, 
-  {name: 'suraj', email: 'suraj@gmail.com', message: 'not fine .' }]
+import { axiosMethod } from "../../Api/Post";
 
 
 const Tables = ({content}) => {
   const { setError } = useForm();
-  const [data, setData] = useState(dummyData);
+  const [data, setData] = useState();
   const [formData, setFormData] = useState()
   const [showForm, setShowForm] = useState(false)
   const printRef = useRef();
-
+  
   const methods  = useForm()
+  
+  const token = localStorage.getItem('tokan')
+  
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
 
   // userQuery to fetch the contents
@@ -48,7 +48,7 @@ const Tables = ({content}) => {
       {
         enabled: false,
         onSuccess: (res) => {
-          setData(res?.data.data);
+          setData(res?.data);
         },
         onError: (err) => {
           if (err.response?.data) {
@@ -68,6 +68,10 @@ const Tables = ({content}) => {
 
     const [labels , setLabels] = useState([]) //For table headings
 
+    useEffect(() => {
+      !showForm && setFormData()
+    }, [showForm])  
+
 
   useEffect(() => {
     refetch();
@@ -78,9 +82,8 @@ const Tables = ({content}) => {
 
   }, [, content]);
 
-  const deleteHandler = (id) => {
-    console.log(id);
-    // apply delete api 
+  const deleteHandler = async (id) => {
+      axiosMethod({url: API + VERSION + `/${content.slice(0, -1).toLowerCase()}/${id}`,  method: 'delete'}).finally(() => refetch())
   };
 
   const editHandler = (data) => {
@@ -108,12 +111,12 @@ const Tables = ({content}) => {
                 {
                   return (
                     <TableRow key={row.id}>
-                      <TableCell className="tableCell">{row.name}</TableCell>
+                      <TableCell className="tableCell">{row.person_name}</TableCell>
                       <TableCell className="tableCell">{row.email}</TableCell>
                       <TableCell className="tableCell">{row.message}</TableCell>
                       <TableCell className="tableCell">
                         <EditIcon className="icon" type="submit" onClick={() => editHandler(row)}/>
-                        <DeleteIcon className="icon" type="submit" onClick={() => deleteHandler(row)} />
+                        <DeleteIcon className="icon" type="submit" onClick={() => deleteHandler(row?.id)} />
                       </TableCell>
                     </TableRow>
                   )
@@ -151,11 +154,11 @@ const Tables = ({content}) => {
         </Table>
       </TableContainer>
       {/* Dynamic create button */}
-      <div className="button-container" onClick={() => setShowForm(curr => !showForm)}>
+      {content !== 'Feedbacks' && <div className="button-container" onClick={() => setShowForm(curr => !showForm)}>
         <button >Create {content.slice(0, -1)} </button>
-      </div>
+      </div>}
       <FormProvider {...methods}>
-        {showForm && content === 'Feedbacks' ? <FeedbackPopup setShowForm={setShowForm} data={formData} /> : showForm && content === 'Querys' ? <QueryPopup setShowForm={setShowForm} data={formData} /> : showForm && content==='Responses' ? <ResponsePopup setShowForm={setShowForm} data={formData}/>: null}
+        {showForm && content === 'Feedbacks' ? <FeedbackPopup setShowForm={setShowForm} data={formData} /> : showForm && content === 'Querys' ? <QueryPopup setShowForm={setShowForm} data={formData} refetch={refetch}/> : showForm && content==='Responses' ? <ResponsePopup setShowForm={setShowForm} data={formData} refetch={refetch}/>: null}
       </FormProvider>
     </div>
     )
