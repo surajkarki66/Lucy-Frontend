@@ -3,6 +3,9 @@
   align-items: center;
 
 }
+.listTitle {
+  padding: 1rem;
+}
 .popup{
   /* The Modal (background) */
   display: block; /* Hidden by default */
