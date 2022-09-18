@@ -3,12 +3,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useEffect } from 'react';
 import { axiosMethod } from '../../Api/Post';
 import { CREATEQUERY, QUERY } from '../../Constants/ApiConstants';
+import axios from 'axios';
 
 
 const QueryPopup = ({setShowForm, data, refetch}) => {
     const {register, handleSubmit, reset} = useFormContext()
 
-        
+    const token = localStorage.getItem('tokan')
+    
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
     useEffect(() => {
         if(data) {
             reset({
