@@ -16,15 +16,11 @@ import Axios from "../../../axios-url";
 import FeedbackPopup from "../../Forms/Feedback/FeedbackPopup";
 import QueryPopup from "../../Forms/Query/QueryPopUp";
 import ResponsePopup from "../../Forms/Response/Response";
-import * as React from 'react';
-import TablePagination from '@mui/material/TablePagination';
+import * as React from "react";
+import TablePagination from "@mui/material/TablePagination";
 import Spinner from "../../Loaders/Spinner";
-import { CSVDownload, CSVLink} from "react-csv";
+import { CSVLink } from "react-csv";
 import { axiosMethod } from "../../Api/Post";
-
-// TODO: first after creating and updating form must be empty
-// TODO:pagination
-// TODO: export ko button xa tesma react-csv lib use garera export garne data as csv
 
 const Tables = ({ content }) => {
   const { setError } = useForm();
@@ -41,15 +37,19 @@ const Tables = ({ content }) => {
 
   //FORM PAGINATION HANDLER
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const [skip, setSkip] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(100);
+  const handleChangePage = (e, page) => {
+    setPage(page);
+    setSkip(skip + 10);
+    refetch();
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+    setSkip(0);
+    refetch();
   };
 
   // userQuery to fetch the contents
@@ -57,12 +57,15 @@ const Tables = ({ content }) => {
     return useQuery(
       `${content}`,
       async () => {
-        return await Axios.get(`/${content.toLowerCase()}/get`, {
-          ///Dynamic fetch on content querys
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        return await Axios.get(
+          `/${content.toLowerCase()}/get?limit=${rowsPerPage}&skip=${skip}`,
+          {
+            ///Dynamic fetch on content querys
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
       },
       {
         enabled: false,
@@ -111,10 +114,6 @@ const Tables = ({ content }) => {
     setFormData(data);
   };
 
-  const downloadCsvHandler = () => {
-
-  }
-  console.log(data)
   return isLoading ? (
     <div className="loading-spinner">
       <Spinner />
@@ -122,11 +121,16 @@ const Tables = ({ content }) => {
   ) : (
     <div className="listContainer">
       <div className="listTitle">Latest{content}</div>
-      <TableContainer sx={{ maxHeight: 650 }} component={Paper} className="table print" ref={printRef}>
+      <TableContainer
+        sx={{ maxHeight: 650 }}
+        component={Paper}
+        className="table print"
+        ref={printRef}
+      >
         <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-            {labels.map((label) => (
+              {labels.map((label) => (
                 <TableCell
                   className="tableCell"
                   style={{ fontWeight: "bold", fontSize: "15px" }}
@@ -134,14 +138,18 @@ const Tables = ({ content }) => {
                   {label}
                 </TableCell>
               ))}{" "}
-              {data && <TableCell>
-                <CSVLink data={data} target='_blank'> <GetAppIcon fontSize="medium" onClick={() => console.log('fd')}/>
-                </CSVLink>
-              </TableCell>}
+              {data && (
+                <TableCell>
+                  <CSVLink data={data} target="_blank">
+                    {" "}
+                    <GetAppIcon fontSize="medium" />
+                  </CSVLink>
+                </TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
-          {data == null ? (
+            {data == null ? (
               <TableRow key="Name"></TableRow>
             ) : (
               data.map((row) => {
@@ -215,16 +223,16 @@ const Tables = ({ content }) => {
         </Table>
       </TableContainer>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={[10, 25, 50]}
         component="div"
-        count={100}
+        count={data?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-       {/* Dynamic create button */}
-       {content !== "Feedback" && (
+      {/* Dynamic create button */}
+      {content !== "Feedback" && (
         <div
           className="button-container"
           onClick={() => setShowForm((curr) => !showForm)}
@@ -253,4 +261,4 @@ const Tables = ({ content }) => {
   );
 };
 
-export default Tables; 
+export default Tables;

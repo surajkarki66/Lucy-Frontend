@@ -12,21 +12,21 @@ const AboutUs: React.FC = () => {
         </div>
         <div className="content">
           <div className="article">
-            <h3>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Iaculis urna id volutpat lacus laoreet non curabitur gravida. Dui
-              nunc mattis enim ut tellus elementum sagittis vitae. Amet purus
-              gravida quis blandit turpis cursus. Est placerat in egestas erat
-              imperdiet. Eget lorem dolor sed viverra ipsum nunc. Ultricies
-              tristique nulla aliquet enim tortor at auctor urna nunc.
+            <h3 style={{ fontWeight: "bold", color: "black" }}>
+              The ultimate goal of this project is to provide a common,
+              user-friendly, efficient way to retrieve the response to a query
+              asked by end-users. We built a chatboat which can be integrate to
+              the college website thus reducing unnecessary traffic and making
+              the college website more informative. To achieve this, we
+              researched ANN and implemented the same.
             </h3>
-            <p>
-              Posuere ac ut consequat semper viverra nam libero justo laoreet.
-              Dolor sed viverra ipsum nunc aliquet. Quis ipsum suspendisse
-              ultrices gravida dictum fusce. Quam quisque id diam vel quam
-              elementum. Nisi lacus sed viverra tellus in hac habitasse platea
-              dictumst.
+            <p style={{ color: "black" }}>
+              Due to the training data constraints and the shallow nature of the
+              ANN, the results are not that impressive and the chatbot model is
+              not quite robust. Then, we collected more data and use advanced
+              NLP models like BERT, RoBERTa, and DistilBERT architecture to
+              train our chatbot which ultimately improved the accuracy of the
+              model.
             </p>{" "}
             <div className="button">
               <a href="https://nec.edu.np/" target="_blank" rel="noreferrer">
