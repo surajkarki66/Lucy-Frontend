@@ -16,9 +16,10 @@ import Axios from "../../../axios-url";
 import FeedbackPopup from "../../Forms/Feedback/FeedbackPopup";
 import QueryPopup from "../../Forms/Query/QueryPopUp";
 import ResponsePopup from "../../Forms/Response/Response";
+import * as React from 'react';
+import TablePagination from '@mui/material/TablePagination';
 import Spinner from "../../Loaders/Spinner";
 import { CSVDownload, CSVLink} from "react-csv";
-
 import { axiosMethod } from "../../Api/Post";
 
 // TODO: first after creating and updating form must be empty
@@ -37,6 +38,19 @@ const Tables = ({ content }) => {
   const token = localStorage.getItem("token");
 
   Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+  //FORM PAGINATION HANDLER
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   // userQuery to fetch the contents
   function useData() {
@@ -100,19 +114,19 @@ const Tables = ({ content }) => {
   const downloadCsvHandler = () => {
 
   }
-console.log(data)
+  console.log(data)
   return isLoading ? (
     <div className="loading-spinner">
       <Spinner />
     </div>
   ) : (
     <div className="listContainer">
-      <div className="listTitle">Latest {content}</div>
-      <TableContainer component={Paper} className="table print" ref={printRef}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <div className="listTitle">Latest{content}</div>
+      <TableContainer sx={{ maxHeight: 650 }} component={Paper} className="table print" ref={printRef}>
+        <Table stickyHeader sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              {labels.map((label) => (
+            {labels.map((label) => (
                 <TableCell
                   className="tableCell"
                   style={{ fontWeight: "bold", fontSize: "15px" }}
@@ -127,7 +141,7 @@ console.log(data)
             </TableRow>
           </TableHead>
           <TableBody>
-            {data == null ? (
+          {data == null ? (
               <TableRow key="Name"></TableRow>
             ) : (
               data.map((row) => {
@@ -200,8 +214,17 @@ console.log(data)
           </TableBody>
         </Table>
       </TableContainer>
-      {/* Dynamic create button */}
-      {content !== "Feedback" && (
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count={100}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+       {/* Dynamic create button */}
+       {content !== "Feedback" && (
         <div
           className="button-container"
           onClick={() => setShowForm((curr) => !showForm)}
@@ -230,4 +253,4 @@ console.log(data)
   );
 };
 
-export default Tables;
+export default Tables; 
