@@ -17,6 +17,8 @@ import FeedbackPopup from "../../Forms/Feedback/FeedbackPopup";
 import QueryPopup from "../../Forms/Query/QueryPopUp";
 import ResponsePopup from "../../Forms/Response/Response";
 import Spinner from "../../Loaders/Spinner";
+import { CSVDownload, CSVLink} from "react-csv";
+
 import { axiosMethod } from "../../Api/Post";
 
 // TODO: first after creating and updating form must be empty
@@ -94,6 +96,11 @@ const Tables = ({ content }) => {
     setShowForm(true);
     setFormData(data);
   };
+
+  const downloadCsvHandler = () => {
+
+  }
+console.log(data)
   return isLoading ? (
     <div className="loading-spinner">
       <Spinner />
@@ -113,9 +120,10 @@ const Tables = ({ content }) => {
                   {label}
                 </TableCell>
               ))}{" "}
-              <TableCell>
-                <GetAppIcon fontSize="medium" />
-              </TableCell>
+              {data && <TableCell>
+                <CSVLink data={data} target='_blank'> <GetAppIcon fontSize="medium" onClick={() => console.log('fd')}/>
+                </CSVLink>
+              </TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
