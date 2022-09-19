@@ -19,15 +19,15 @@ const App: React.FC = () => {
       <Route path="/chat" element={<ChatPage />} />
       <Route path="/feedback" element={<FeedbackPage />} />
       <Route path="/aboutUs" element={<AboutUs />} />
-      <Route path='/login' element={<Login /> } />
-      <Route path='/signup' element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/admin" element={<AdminPageHome />} />
     </Routes>
   );
   return (
     <>
       <ToastContainer position="top-center" />
-      {location?.pathname !== '/' && <Nav />}
+      {location?.pathname !== "/" && <Nav />}
       {routes}
     </>
   );

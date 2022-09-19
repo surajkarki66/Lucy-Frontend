@@ -1,4 +1,5 @@
 import "./Table.css";
+import GetAppIcon from "@mui/icons-material/GetApp";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,40 +7,42 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useQuery } from "react-query";
 import { useForm, FormProvider } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import { API, VERSION } from "../../Constants/ApiConstants";
+import Axios from "../../../axios-url";
 import FeedbackPopup from "../../Forms/Feedback/FeedbackPopup";
 import QueryPopup from "../../Forms/Query/QueryPopUp";
 import ResponsePopup from "../../Forms/Response/Response";
 import Spinner from "../../Loaders/Spinner";
 import { axiosMethod } from "../../Api/Post";
 
+// TODO: first after creating and updating form must be empty
+// TODO:pagination
+// TODO: export ko button xa tesma react-csv lib use garera export garne data as csv
 
-const Tables = ({content}) => {
+const Tables = ({ content }) => {
   const { setError } = useForm();
   const [data, setData] = useState();
-  const [formData, setFormData] = useState()
-  const [showForm, setShowForm] = useState(false)
+  const [formData, setFormData] = useState();
+  const [showForm, setShowForm] = useState(false);
   const printRef = useRef();
-  
-  const methods  = useForm()
-  
-  const token = localStorage.getItem('tokan')
-  
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+  const methods = useForm();
+
+  const token = localStorage.getItem("token");
+
+  Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   // userQuery to fetch the contents
   function useData() {
     return useQuery(
       `${content}`,
       async () => {
-        return await axios.get(API + VERSION + `/${content.slice(0, -1).toLowerCase()}/get`, { ///Dynamic fetch on content querys
+        return await Axios.get(`/${content.toLowerCase()}/get`, {
+          ///Dynamic fetch on content querys
           headers: {
             "Content-Type": "application/json",
           },
@@ -60,46 +63,59 @@ const Tables = ({content}) => {
         },
         retry: 0,
       }
-      );
-    }
-    
+    );
+  }
 
-    const { refetch, isLoading } = useData();
+  const { refetch, isLoading } = useData();
 
-    const [labels , setLabels] = useState([]) //For table headings
+  const [labels, setLabels] = useState([]); //For table headings
 
-    useEffect(() => {
-      !showForm && setFormData()
-    }, [showForm])  
-
+  useEffect(() => {
+    !showForm && setFormData();
+  }, [showForm]);
 
   useEffect(() => {
     refetch();
     // Set the labels according to content
-    if(content === 'Feedbacks') setLabels(['Name', 'Email', 'Message'])
-    if(content === 'Querys') setLabels(['Text', 'Indent'])
-    if(content === 'Responses') setLabels(['Text', 'Tag', 'Link'])
-
+    if (content === "Feedback") setLabels(["Name", "Email", "Message"]);
+    if (content === "Query") setLabels(["Text", "Intent"]);
+    if (content === "Response") setLabels(["Text", "Tag", "Link"]);
   }, [, content]);
 
   const deleteHandler = async (id) => {
-      axiosMethod({url: API + VERSION + `/${content.slice(0, -1).toLowerCase()}/${id}`,  method: 'delete'}).finally(() => refetch())
+    await axiosMethod({
+      url: `/${content.toLowerCase()}/${id}`,
+      method: "delete",
+      purpose: "Deleted successfully",
+    }).finally(() => refetch());
   };
 
   const editHandler = (data) => {
-    // Show popup models with default data.
-    setShowForm(true)
-    setFormData(data)
-  }
-  return (
-    isLoading ? <div className="loading-spinner"><Spinner /></div> : (
-      <div className="listContainer">
+    setShowForm(true);
+    setFormData(data);
+  };
+  return isLoading ? (
+    <div className="loading-spinner">
+      <Spinner />
+    </div>
+  ) : (
+    <div className="listContainer">
       <div className="listTitle">Latest {content}</div>
       <TableContainer component={Paper} className="table print" ref={printRef}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              {labels.map(label => <TableCell className="tableCell">{label}</TableCell>)}
+              {labels.map((label) => (
+                <TableCell
+                  className="tableCell"
+                  style={{ fontWeight: "bold", fontSize: "15px" }}
+                >
+                  {label}
+                </TableCell>
+              ))}{" "}
+              <TableCell>
+                <GetAppIcon fontSize="medium" />
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -107,46 +123,69 @@ const Tables = ({content}) => {
               <TableRow key="Name"></TableRow>
             ) : (
               data.map((row) => {
-                if (content === 'Feedbacks')
-                {
+                if (content === "Feedback") {
                   return (
                     <TableRow key={row.id}>
-                      <TableCell className="tableCell">{row.person_name}</TableCell>
+                      <TableCell className="tableCell">
+                        {row.person_name}
+                      </TableCell>
                       <TableCell className="tableCell">{row.email}</TableCell>
                       <TableCell className="tableCell">{row.message}</TableCell>
                       <TableCell className="tableCell">
-                        <EditIcon className="icon" type="submit" onClick={() => editHandler(row)}/>
-                        <DeleteIcon className="icon" type="submit" onClick={() => deleteHandler(row?.id)} />
+                        <EditIcon
+                          className="icon"
+                          type="submit"
+                          onClick={() => editHandler(row)}
+                        />
+                        <DeleteIcon
+                          className="icon"
+                          type="submit"
+                          onClick={() => deleteHandler(row?.id)}
+                        />
                       </TableCell>
                     </TableRow>
-                  )
+                  );
                 }
-                if (content === 'Querys')
-                {
+                if (content === "Query") {
                   return (
                     <TableRow key={row.id}>
                       <TableCell className="tableCell">{row.text}</TableCell>
-                      <TableCell className="tableCell">{row.indent}</TableCell>
+                      <TableCell className="tableCell">{row.intent}</TableCell>
                       <TableCell className="tableCell">
-                        <EditIcon className="icon" type="submit" onClick={() => editHandler(row)}/>
-                        <DeleteIcon className="icon" type="submit" onClick={() => deleteHandler(row)} />
+                        <EditIcon
+                          className="icon"
+                          type="submit"
+                          onClick={() => editHandler(row)}
+                        />
+                        <DeleteIcon
+                          className="icon"
+                          type="submit"
+                          onClick={() => deleteHandler(row?.id)}
+                        />
                       </TableCell>
                     </TableRow>
-                  )
+                  );
                 }
-                if (content === 'Responses')
-                {
+                if (content === "Response") {
                   return (
                     <TableRow key={row.id}>
                       <TableCell className="tableCell">{row.text}</TableCell>
                       <TableCell className="tableCell">{row.tag}</TableCell>
                       <TableCell className="tableCell">{row.Link}</TableCell>
                       <TableCell className="tableCell">
-                        <EditIcon className="icon" type="submit" onClick={() => editHandler(row)}/>
-                        <DeleteIcon className="icon" type="submit" onClick={() => deleteHandler(row?.id)} />
+                        <EditIcon
+                          className="icon"
+                          type="submit"
+                          onClick={() => editHandler(row)}
+                        />
+                        <DeleteIcon
+                          className="icon"
+                          type="submit"
+                          onClick={() => deleteHandler(row?.id)}
+                        />
                       </TableCell>
                     </TableRow>
-                  )
+                  );
                 }
               })
             )}
@@ -154,14 +193,32 @@ const Tables = ({content}) => {
         </Table>
       </TableContainer>
       {/* Dynamic create button */}
-      {content !== 'Feedbacks' && <div className="button-container" onClick={() => setShowForm(curr => !showForm)}>
-        <button >Create {content.slice(0, -1)} </button>
-      </div>}
+      {content !== "Feedback" && (
+        <div
+          className="button-container"
+          onClick={() => setShowForm((curr) => !showForm)}
+        >
+          <button>Create {content} </button>
+        </div>
+      )}
       <FormProvider {...methods}>
-        {showForm && content === 'Feedbacks' ? <FeedbackPopup setShowForm={setShowForm} data={formData} /> : showForm && content === 'Querys' ? <QueryPopup setShowForm={setShowForm} data={formData} refetch={refetch}/> : showForm && content==='Responses' ? <ResponsePopup setShowForm={setShowForm} data={formData} refetch={refetch}/>: null}
+        {showForm && content === "Feedback" ? (
+          <FeedbackPopup setShowForm={setShowForm} data={formData} />
+        ) : showForm && content === "Query" ? (
+          <QueryPopup
+            setShowForm={setShowForm}
+            data={formData}
+            refetch={refetch}
+          />
+        ) : showForm && content === "Response" ? (
+          <ResponsePopup
+            setShowForm={setShowForm}
+            data={formData}
+            refetch={refetch}
+          />
+        ) : null}
       </FormProvider>
     </div>
-    )
   );
 };
 

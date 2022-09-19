@@ -1,19 +1,13 @@
-export const API = 'http://localhost:8080/api'
+export const DOCUMENTAPI = "/document";
 
-export const VERSION = '/v2'
+export const SIGNUPAPI = "/user/signup";
 
-export const ADMINLOGINAPI = API + VERSION + '/auth/login'
+export const LOGINAPI = "/user/login";
 
-export const DOCUMENTAPI = API + VERSION + '/document'
+export const RESPONSE = "/response";
 
-export const SIGNUPAPI = API + VERSION + '/user/signup'
+export const CREATERESPONSE = "/response/create";
 
-export const LOGINAPI = API + VERSION + '/user/login'
+export const QUERY = "/query";
 
-export const RESPONSE = API + VERSION + '/response'
-
-export const CREATERESPONSE = API + VERSION + '/response/create'
-
-export const QUERY = API + VERSION + '/query'
-
-export const CREATEQUERY = API + VERSION + QUERY + '/create'
+export const CREATEQUERY = QUERY + "/create";
