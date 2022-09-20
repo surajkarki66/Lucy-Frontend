@@ -17,7 +17,7 @@ const SpeechRecognition: React.FC<PropsType> = (props) => {
   const [blocked, setBlocked] = useState(false);
 
   const onEnd = () => {
-    if (val) {
+    if (val !== "") {
       askLucy(val);
     }
   };

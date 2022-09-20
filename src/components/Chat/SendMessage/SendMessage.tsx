@@ -1,14 +1,21 @@
 import { SyntheticEvent, useState } from "react";
-
+import Switch from "@mui/material/Switch";
 import "./SendMessage.css";
 import SpeechRecognition from "../../SpeechRecognition/SpeechRecognition";
 
 type PropsType = {
   askLucy: (message: string) => Promise<void>;
   loading: boolean;
+  setTTSEnable: React.Dispatch<React.SetStateAction<boolean>>;
+  ttsEnable: boolean;
 };
 
-const SendMessage: React.FC<PropsType> = ({ askLucy, loading }) => {
+const SendMessage: React.FC<PropsType> = ({
+  askLucy,
+  loading,
+  setTTSEnable,
+  ttsEnable,
+}) => {
   const [msg, setMsg] = useState("");
 
   const handleSubmit = (e: SyntheticEvent) => {
@@ -19,7 +26,7 @@ const SendMessage: React.FC<PropsType> = ({ askLucy, loading }) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className='submitButton'>
+      <form onSubmit={handleSubmit} className="submitButton">
         <div className="sendMsg">
           <input
             value={msg}
@@ -32,7 +39,13 @@ const SendMessage: React.FC<PropsType> = ({ askLucy, loading }) => {
           <button className="btn-send" type="submit">
             {!loading ? "Send" : "Loading"}
           </button>
-          <SpeechRecognition setMsg={setMsg} askLucy={askLucy} loading/>
+          <SpeechRecognition setMsg={setMsg} askLucy={askLucy} loading />
+          <Switch
+            checked={ttsEnable}
+            onChange={() => setTTSEnable(!ttsEnable)}
+            name="Enable TTS"
+            color="primary"
+          />
         </div>
       </form>
     </div>

@@ -9,6 +9,7 @@ import SendMessage from "../../components/Chat/SendMessage/SendMessage";
 const Chat: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const scroll = useRef<null | HTMLDivElement>(null);
+  const [ttsEnable, setTTSEnable] = useState(false);
   const [messages, setMessages] = useState([
     { message: "Hello! This is Lucy, NEC chatbot", id: "lucy", link: "" },
   ]);
@@ -26,7 +27,7 @@ const Chat: React.FC = () => {
     try {
       setLoading(true);
       const { data } = await Axios.get(`/bot/chat?message=${msg}`);
-      if (supported) {
+      if (supported && ttsEnable) {
         speak({ text: data.message });
       }
       setMessages((message) => [
@@ -46,7 +47,12 @@ const Chat: React.FC = () => {
           <ChatMessage key={id} id={m.id} message={m.message} link={m.link} />
         ))}
       </div>
-      <SendMessage askLucy={askLucy} loading={loading} />
+      <SendMessage
+        askLucy={askLucy}
+        loading={loading}
+        setTTSEnable={setTTSEnable}
+        ttsEnable={ttsEnable}
+      />
       <div ref={scroll}></div>
     </div>
   );
