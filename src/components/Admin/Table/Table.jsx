@@ -14,6 +14,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 import Axios from "../../../axios-url";
 import FeedbackPopup from "../../Forms/Feedback/FeedbackPopup";
+import IntentPopup from "../../Forms/Intent/IntentPopup";
 import QueryPopup from "../../Forms/Query/QueryPopUp";
 import ResponsePopup from "../../Forms/Response/Response";
 import * as React from "react";
@@ -96,6 +97,7 @@ const Tables = ({ content }) => {
   useEffect(() => {
     refetch();
     // Set the labels according to content
+    if (content === "Intent") setLabels(["Intent No.", "Title"]);
     if (content === "Feedback") setLabels(["Name", "Email", "Message"]);
     if (content === "Query") setLabels(["Text", "Intent"]);
     if (content === "Response") setLabels(["Text", "Tag", "Link"]);
@@ -120,7 +122,7 @@ const Tables = ({ content }) => {
     </div>
   ) : (
     <div className="listContainer">
-      <div className="listTitle">Latest{content}</div>
+      <div className="listTitle">Latest {content}</div>
       <TableContainer
         sx={{ maxHeight: 650 }}
         component={Paper}
@@ -153,6 +155,28 @@ const Tables = ({ content }) => {
               <TableRow key="Name"></TableRow>
             ) : (
               data.map((row) => {
+                if (content === "Intent") {
+                  return (
+                    <TableRow key={row.id}>
+                      <TableCell className="tableCell">
+                        {row.intent_no}
+                      </TableCell>
+                      <TableCell className="tableCell">{row.title}</TableCell>
+                      <TableCell className="tableCell">
+                        <EditIcon
+                          className="icon"
+                          type="submit"
+                          onClick={() => editHandler(row)}
+                        />
+                        <DeleteIcon
+                          className="icon"
+                          type="submit"
+                          onClick={() => deleteHandler(row?.title)}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                }
                 if (content === "Feedback") {
                   return (
                     <TableRow key={row.id}>
@@ -255,7 +279,12 @@ const Tables = ({ content }) => {
             data={formData}
             refetch={refetch}
           />
-        ) : null}
+        ) : showForm && content === "Intent" ? (
+          <IntentPopup
+            setShowForm={setShowForm}
+            data={formData}
+            refetch={refetch}
+          />): null}
       </FormProvider>
     </div>
   );

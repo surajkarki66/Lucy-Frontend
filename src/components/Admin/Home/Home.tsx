@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import SideBar from "../SideBar/SideBar";
 import NavBar from "../NavBar/NavBar";
@@ -17,7 +16,7 @@ const AdminPageHome = () => {
     navigate(ADMINLOGIN);
     window.location.reload();
   };
-  const [content, setContent] = useState("Feedback");
+  const [content, setContent] = useState("Intent");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

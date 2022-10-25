@@ -10,8 +10,11 @@ export const axiosMethod = async ({ url, data, method, purpose }) => {
   return new Promise(async (resolve, reject) => {
     await instance[method](url, { ...data }, { withCredentials: true })
       .then((res) => {
-        console.log(res);
         if (res?.data?.id) {
+          toast.success(purpose);
+          resolve(true);
+        }
+        if (res?.data?.title) {
           toast.success(purpose);
           resolve(true);
         }
