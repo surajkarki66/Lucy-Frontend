@@ -18,7 +18,6 @@ import IntentPopup from "../../Forms/Intent/IntentPopup";
 import QueryPopup from "../../Forms/Query/QueryPopUp";
 import ResponsePopup from "../../Forms/Response/Response";
 import * as React from "react";
-import TablePagination from "@mui/material/TablePagination";
 import Spinner from "../../Loaders/Spinner";
 import { CSVLink } from "react-csv";
 import { axiosMethod } from "../../Api/Post";
@@ -37,56 +36,35 @@ const Tables = ({ content }) => {
   Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   //FORM PAGINATION HANDLER
-  const [page, setPage] = React.useState(0);
-  const [skip, setSkip] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(100);
-  const handleChangePage = (e, page) => {
-    setPage(page);
-    setSkip(skip + 10);
-    refetch();
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-    setSkip(0);
-    refetch();
-  };
+  const [limit, setLimit] = React.useState(1000);
+  const { refetch, isLoading } = useData();
 
   // userQuery to fetch the contents
   function useData() {
-    return useQuery(
-      `${content}`,
-      async () => {
-        return await Axios.get(
-          `/${content.toLowerCase()}/get?limit=${rowsPerPage}&skip=${skip}`,
-          {
-            ///Dynamic fetch on content querys
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+    const fetch = async () => {
+      return await Axios.get(`/${content.toLowerCase()}/get?limit=${limit}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    };
+    return useQuery(`${content}`, fetch, {
+      enabled: false,
+      onSuccess: (res) => {
+        console.log(res?.data);
+        setData(res?.data);
       },
-      {
-        enabled: false,
-        onSuccess: (res) => {
-          setData(res?.data);
-        },
-        onError: (err) => {
-          if (err.response?.data) {
-            setError("SubmitError", {
-              type: "custom",
-              message: err.response?.data?.error,
-            });
-          }
-        },
-        retry: 0,
-      }
-    );
+      onError: (err) => {
+        if (err.response?.data) {
+          setError("SubmitError", {
+            type: "custom",
+            message: err.response?.data?.error,
+          });
+        }
+      },
+      retry: 0,
+    });
   }
-
-  const { refetch, isLoading } = useData();
 
   const [labels, setLabels] = useState([]); //For table headings
 
@@ -101,7 +79,7 @@ const Tables = ({ content }) => {
     if (content === "Feedback") setLabels(["Name", "Email", "Message"]);
     if (content === "Query") setLabels(["Text", "Intent"]);
     if (content === "Response") setLabels(["Text", "Tag", "Link"]);
-  }, [, content]);
+  }, [refetch, content]);
 
   const deleteHandler = async (id) => {
     await axiosMethod({
@@ -134,6 +112,7 @@ const Tables = ({ content }) => {
             <TableRow>
               {labels.map((label) => (
                 <TableCell
+                  key={label}
                   className="tableCell"
                   style={{ fontWeight: "bold", fontSize: "15px" }}
                 >
@@ -157,7 +136,7 @@ const Tables = ({ content }) => {
               data.map((row) => {
                 if (content === "Intent") {
                   return (
-                    <TableRow key={row.id}>
+                    <TableRow key={row.intent_no}>
                       <TableCell className="tableCell">
                         {row.intent_no}
                       </TableCell>
@@ -240,21 +219,14 @@ const Tables = ({ content }) => {
                       </TableCell>
                     </TableRow>
                   );
+                } else {
+                  return null;
                 }
               })
             )}
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 50]}
-        component="div"
-        count={data?.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
       {/* Dynamic create button */}
       {content !== "Feedback" && (
         <div
@@ -284,7 +256,8 @@ const Tables = ({ content }) => {
             setShowForm={setShowForm}
             data={formData}
             refetch={refetch}
-          />): null}
+          />
+        ) : null}
       </FormProvider>
     </div>
   );
