@@ -36,7 +36,7 @@ const Tables = ({ content }) => {
   Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   //FORM PAGINATION HANDLER
-  const [limit, setLimit] = React.useState(1000);
+  const [limit] = React.useState(1000);
   const { refetch, isLoading } = useData();
 
   // userQuery to fetch the contents
@@ -51,7 +51,6 @@ const Tables = ({ content }) => {
     return useQuery(`${content}`, fetch, {
       enabled: false,
       onSuccess: (res) => {
-        console.log(res?.data);
         setData(res?.data);
       },
       onError: (err) => {

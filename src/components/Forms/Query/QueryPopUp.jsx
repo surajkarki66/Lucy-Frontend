@@ -17,7 +17,7 @@ const QueryPopup = ({ setShowForm, data, refetch }) => {
         intent: data?.intent,
       });
     }
-  }, [, data]);
+  }, [reset, data]);
 
   const formSubmit = async (d) => {
     if (data) {
@@ -59,7 +59,7 @@ const QueryPopup = ({ setShowForm, data, refetch }) => {
         />
 
         <label>Intent</label>
-        <textarea
+        <input
           placeholder="Intent"
           {...register("intent")}
           minLength={3}
