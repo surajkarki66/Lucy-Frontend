@@ -1,8 +1,8 @@
 # Lucy: A NLP Powered Chatbot
 
-Front-end code for a NLP Powered Chatbot (3rd year project) written in Javascript using React library. You can access the chatbot using this web interface.
+Front-end code for an NLP Powered Chatbot (3rd year project) written in Javascript using React library. You can access the chatbot using this web interface.
 
-Note: Firstly, you have to ensure that Lucy backend server is up and running in your machine.
+Note: Firstly, you have to ensure that Lucy's backend server is up and running on your machine. You can access the Lucy backend by clicking [here](https://github.com/surajkarki66/Lucy-Backend).
 
 ---
 
