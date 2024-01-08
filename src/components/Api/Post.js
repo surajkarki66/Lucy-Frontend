@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import instance from "../../axios-url";
 
-const token = localStorage.getItem("token");
+const token = localStorage.getItem("token_lucy");
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 

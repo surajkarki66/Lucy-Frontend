@@ -3,32 +3,33 @@ import { useNavigate } from "react-router";
 import SideBar from "../SideBar/SideBar";
 import NavBar from "../NavBar/NavBar";
 import Tables from "../Table/Table";
-import jwt from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 import "./Home.css";
+import { signOut } from "../../../helpers/auth";
 import { ADMINLOGIN } from "../../Constants/RoutesConstants";
 import Spinner from "../../Loaders/Spinner";
 
 const AdminPageHome = () => {
   const navigate = useNavigate();
   const logoutButtonHandler = () => {
-    localStorage.removeItem("token");
-    navigate(ADMINLOGIN);
-    window.location.reload();
+    signOut(() => {
+      window.location.href = ADMINLOGIN;
+    });
   };
   const [content, setContent] = useState("Intent");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token_lucy");
 
     if (token) {
       const user: { user_id: string; role: string; iat: string; exp: string } =
-        jwt(token);
+        jwtDecode(token);
       if (!user?.user_id) navigate(ADMINLOGIN);
     }
     setIsLoading(false);
-  }, []);
+  }, [navigate]);
 
   if (isLoading) return <Spinner />;
 

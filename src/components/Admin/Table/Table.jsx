@@ -31,7 +31,7 @@ const Tables = ({ content }) => {
 
   const methods = useForm();
 
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token_lucy");
 
   Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 

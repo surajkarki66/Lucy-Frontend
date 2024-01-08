@@ -7,7 +7,7 @@ import Axios from "../../../axios-url";
 
 const IntentPopup = ({ setShowForm, data, refetch }) => {
   const { register, handleSubmit, reset } = useFormContext();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token_lucy");
   Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
   useEffect(() => {

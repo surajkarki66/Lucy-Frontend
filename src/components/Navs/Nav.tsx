@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import Lucy from "../../assets/images/Lucy.png";
 import { useEffect, useState } from "react";
-import jwt from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const Nav = () => {
   const location = useLocation();
@@ -12,11 +12,11 @@ const Nav = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token_lucy");
 
     if (token) {
       const user: { user_id: string; role: string; iat: string; exp: string } =
-        jwt(token);
+      jwtDecode(token);
       if (user?.role === "admin") setIsAdmin(true);
     }
   }, [location?.pathname]);

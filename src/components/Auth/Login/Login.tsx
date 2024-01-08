@@ -1,6 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import jwt from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 import Axios from "../../../axios-url";
 import "../Auth.css";
@@ -23,13 +23,13 @@ const Login = () => {
     };
     Axios.post(LOGINAPI, data)
       .then((response) => {
-        localStorage.setItem("token", response?.data?.access_token);
+        localStorage.setItem("token_lucy", response?.data?.access_token);
         const user: {
           user_id: string;
           role: string;
           iat: string;
           exp: string;
-        } = jwt(response?.data?.access_token);
+        } = jwtDecode(response?.data?.access_token);
 
         if (user?.role === "admin") {
           navigate("/admin");
@@ -46,11 +46,11 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("tokan");
+    const token = localStorage.getItem("token_lucy");
 
     if (token) {
       const user: { user_id: string; role: string; iat: string; exp: string } =
-        jwt(token);
+        jwtDecode(token);
       if (user?.role === "admin") setisLogedIn(true);
     }
     setIsLoading(false);

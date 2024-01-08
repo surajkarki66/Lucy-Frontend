@@ -1,10 +1,10 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { Navigate } from "react-router";
 import { SIGNUPAPI } from "../../Constants/ApiConstants";
-import jwt from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { toast } from "react-toastify";
 
-import Axios from "../../../axios-url";
+
 import Spinner from "../../Loaders/Spinner";
 import { axiosMethod } from "../../Api/Post";
 
@@ -38,11 +38,11 @@ const Signup = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token_lucy");
 
     if (token) {
       const user: { user_id: string; role: string; iat: string; exp: string } =
-        jwt(token);
+        jwtDecode(token);
       if (user?.role === "admin") setIsAdmin(true);
     }
     setIsLoading(false);
@@ -54,7 +54,6 @@ const Signup = () => {
   } else if (isLoading) {
     return <Spinner />;
   } else {
-    // HTML file to show to the user
     return (
       <div className="Container">
         <div className="form-container sign-in-container">

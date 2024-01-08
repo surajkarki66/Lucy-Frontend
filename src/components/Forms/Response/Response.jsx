@@ -7,7 +7,7 @@ import { axiosMethod, sendPost } from "../../Api/Post";
 
 const ResponsePopup = ({ setShowForm, data, refetch }) => {
   const { register, handleSubmit, reset } = useFormContext();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token_lucy");
   Axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   useEffect(() => {
     if (data) {
