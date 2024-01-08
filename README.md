@@ -44,7 +44,7 @@ Note: Firstly, you have to ensure that Lucy's backend server is up and running o
 
 ### 2. Running Frontend
 
-You can see the frontend of the Lucy on [http://localhost:3000](http://localhost:3000) \n
-You can access the admin page by login using the following login credentials:
-- email: `admin@admin.com`
-- password: `admin123`
+- You can see the frontend of the Lucy on [http://localhost:3000](http://localhost:3000)
+- You can access the admin page by login using the following login credentials:
+    - email: `admin@admin.com`
+    - password: `admin123`
